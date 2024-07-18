@@ -1,0 +1,76 @@
+:root {
+    --sm-dark-color: #212121;
+    --sm-light-color: #e7e7e7;
+    --sm-font: "Inconsolata", monospace;
+    --sm-heading-font: var(--sm-font);
+    --sm-title-color: var(var(--sm-light-color))
+}
+/* #region Sticky Footer */
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+main {
+    flex: 1 0 auto;
+}
+footer {
+    flex-shrink: 0;
+}
+/* #endregion Sticky Footer */
+body {
+    font-family: var(--sm-font);
+    color: var(--sm-light-color);
+    background: #0F2027;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+nav {
+    background-color: var(--sm-theme-800);
+}
+.nav-logo {
+    height: 2rem;
+}
+.app-logo {
+    max-width: 450px;
+}
+.main-title {
+    font-size: 3rem;
+    line-height: 2.7rem;
+}
+.subtitle {
+    font-size: 1.8rem;
+}
+.tech-stack {
+    font-size: 1.4rem;
+}
+footer {
+    font-size: 1.3rem;
+    background-color: var(--sm-theme-800);
+}
+footer img {
+    height: 1.3rem;
+}
+
+h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1{
+    font-family: var(--sm-heading-font);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sm-title-color);
+    letter-spacing: .1rem;
+}
+a {
+    color: var(--sm-theme-500);
+}
+a:hover {
+    color: var(--sm-theme-400);
+}
+.btn-primary {
+    --bs-btn-bg: var(--sm-theme-700);
+    --bs-btn-border-color: var(--sm-theme-700);
+    --bs-btn-hover-bg: var(--sm-theme-800);
+    --bs-btn-hover-border-color: var(--sm-theme-600);
+}
