@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>APP NAME Coding Challenge by Morote</title>
+    <title>MovieWatcher by Morote</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,7 +36,7 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/index.html"><img class="nav-logo"
-                        src="/img/Lotus_white.svg">APPNAME</a>
+                        src="/img/Lotus_white.svg">MovieWatcher</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -63,12 +63,38 @@
                 </div>
             </div>
         </nav>
+        <!-- Secondary Nav -->
+        <div class="container mt-5">
+            <div class="row row-cols-1 gy-3">
+                <div class="col">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search Movies" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-title="Enter a movie title" id="movie-search">
+                        <button class="btn btn-outline-primary">Search</button>
+                    </div>
+                </div>
+                <div class="col text-center text-md-start">
+                    <div class="btn-group" role="group" id="btn-bar">
+                        <input type="radio" class="btn-check" name="btn-radio" id="btn-now-playing" autocomplete="off"
+                            checked>
+                        <label for="btn-now-playing" class="btn btn-outline-primary">Now Playing</label>
+                        <input type="radio" class="btn-check" name="btn-radio" id="btn-popular" autocomplete="off">
+                        <label for="btn-popular" class="btn btn-outline-primary">Popular</label>
+                        <input type="radio" class="btn-check" name="btn-radio" id="btn-favorites" autocomplete="off">
+                        <label for="btn-favorites" class="btn btn-outline-primary">Favorites</label>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
     <main>
         <div class="container mt-5">
-            <input id="message" placeholder="Enter a message" class="form-control">
-            <button type="button" id="btnSubmit" class="btn btn-primary m-2">Display Message</button>
-            <div class="alert alert-primary mt-5 d-none" role="alert" id="alertMessage"></div>
+            <h1 class="mt-3 text-center display-4" id="page-title">Now Playing Movies</h1>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 g-3" id="movie-row">
+                <!-- Movie Cards -->
+            </div>
+            <input type="text" id="api">
+            <button onclick="printAPI()">print</button>
         </div>
     </main>
     <footer class="py-3">
@@ -78,7 +104,7 @@
                     <img src="/img/Morote_white_underline.svg">
                 </div>
                 <div class="col text-center">
-                    &copy;2024
+                    <img src="/img/tmDBLogo.png" style="height: 35px;">
                 </div>
                 <div class="col hstack gap-2 justify-content-center justify-content-md-end">
                     <div><a href="https://github.com/Grazerquart"><i class="bi bi-github"></i></a></div>
@@ -87,15 +113,44 @@
             </div>
         </div>
     </footer>
+    <!-- Template -->
+    <template id="movie-card-template">
+        <div class="col">
+            <div class="card h-100">
+                <img class="card-img-top" alt="Movie Poster"
+                    src="https://image.tmdb.org/t/p/w184/qhb1qOilapbapxWQn9jtRCMwXJF.jpg">
+                <div class="card-body border-1 border-top">
+                    <div class="card-title fw-bold lh-1">
+                        Wonka
+                    </div>
+                    <div class="card-text lh-1 fst-italic">
+                        Willy Wonka - chock-full of ideas and determined to change the world one delectable bite at
+                        a time - is proof that the best things in life begin with a dream,
+                        and if you're lucky
+                        enough to meet Willy Wonka, anything is possible.
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <button class="btn btn-outline-primary" data-fav="false">Add Fav</button>
+                    <button class="btn btn-outline-danger" data-fav="true">Remove Fav</button>
+                    <a href="#" class="btn btn-outline-primary">More Info</a>
+
+                </div>
+            </div>
+        </div>
+
+    </template>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
     <!-- My JS -->
     <script src="/js/app.js"></script>
-    <script>
-        document.getElementById("btnSubmit").addEventListener("click", getValues);
-    </script>
+    <script src="/js/tmdbAPI.js"></script>
 </body>
 
 </html>
