@@ -75,12 +75,14 @@
                 </div>
                 <div class="col text-center text-md-start">
                     <div class="btn-group" role="group" id="btn-bar">
-                        <input type="radio" class="btn-check" name="btn-radio" id="btn-now-playing" autocomplete="off"
+                        <input type="radio" onchange="displayNowPlayingMovies()" class="btn-check" name="btn-radio" id="btn-now-playing" autocomplete="off"
                             checked>
                         <label for="btn-now-playing" class="btn btn-outline-primary">Now Playing</label>
-                        <input type="radio" class="btn-check" name="btn-radio" id="btn-popular" autocomplete="off">
+
+                        <input type="radio" onchange="displayPopularMovies()" class="btn-check" name="btn-radio" id="btn-popular" autocomplete="off">
                         <label for="btn-popular" class="btn btn-outline-primary">Popular</label>
-                        <input type="radio" class="btn-check" name="btn-radio" id="btn-favorites" autocomplete="off">
+
+                        <input type="radio" onchange="displayFavorites()" class="btn-check" name="btn-radio" id="btn-favorites" autocomplete="off">
                         <label for="btn-favorites" class="btn btn-outline-primary">Favorites</label>
                     </div>
                 </div>
@@ -131,8 +133,8 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <button class="btn btn-outline-primary" data-fav="false">Add Fav</button>
-                    <button class="btn btn-outline-danger" data-fav="true">Remove Fav</button>
+                    <button onclick="addFavoriteMovie(this)" class="btn btn-outline-success" data-fav="false">Add Fav</button>
+                    <button onclick="removeFavoriteMovie(this)" class="btn btn-outline-danger" data-fav="true">Remove Fav</button>
                     <a href="#" class="btn btn-outline-primary">More Info</a>
 
                 </div>
