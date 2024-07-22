@@ -16,14 +16,24 @@ displayNowPlayingMovies();
 async function displayNowPlayingMovies() {
   let movies = await getNowPlayingMovies();
   displayMovies(movies);
+  document.getElementById("page-title").innerText = "Now Playing Movies";
 }
 async function displayPopularMovies() {
   let movies = await getPopularMovies();
   displayMovies(movies);
+  document.getElementById("page-title").innerText = "Popular Movies";
 }
 async function displayFavorites() {
   let movies = await getFavoriteMovies();
   displayMovies(movies);
+  document.getElementById("page-title").innerText = "Your Favorite Movies";
+}
+async function displaySearchResults() {
+  let query = document.getElementById("movie-search").value;
+  let encodeQuery = encodeURIComponent(query);
+  let movies = await getSearchResults(encodeQuery);
+  displayMovies(movies);
+  document.getElementById("page-title").innerText = `Search Results for "${query}`;
 }
 // Api pulls
 async function getNowPlayingMovies() {
@@ -60,6 +70,23 @@ async function getPopularMovies() {
     return [];
   }
 }
+async function getSearchResults(query) {
+  let apiKey = localStorage.getItem("tmdbAPIkey");
+  const searchURL = `https://api.themoviedb.org/3/search/movie?query=${query}`;
+  try {
+    let response = await fetch(searchURL, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+    if (!response.ok) throw new Error("Network response was not ok");
+    let search = await response.json();
+    return search.results;
+  } catch (error) {
+    console.error(`Fetch Error ${error}`);
+    return [];
+  }
+}
 async function getMovie(id) {
   let apiKey = localStorage.getItem("tmdbAPIkey");
   const movieURL = `https://api.themoviedb.org/3/movie/${id}`;
@@ -80,21 +107,39 @@ async function getMovie(id) {
 // Non api pull
 async function addFavoriteMovie(btn) {
   let id = btn.getAttribute("data-movie-id");
-  btn.style.display = 'none';
-  let parent = btn.parentElement;
-  let otherBtn = parent.querySelector('[data-fav="true"]');
-  otherBtn.style.display = 'block';
+  //btn.style.display = "none";
+  //let parent = btn.parentElement;
+  //let otherBtn = parent.querySelector('[data-fav="true"]');
+  //otherBtn.style.display = "block";
   let favorites = getFavoriteMovies();
   let duplicate = favorites.find((movie) => movie.id == id);
   if (duplicate == undefined) {
-    let newFavorite =  await getMovie(id);
+    let newFavorite = await getMovie(id);
     if (newFavorite != undefined) {
       favorites.push(newFavorite);
       saveFavoriteMovies(favorites);
     }
   }
+  selectAndClickCategory();
 }
-async function removeFavoriteMovie(btn) {}
+async function removeFavoriteMovie(btn) {
+  let id = btn.getAttribute("data-movie-id");
+  //btn.style.display = "none";
+  //let parent = btn.parentElement;
+  //let otherBtn = parent.querySelector('[data-fav="false"]');
+  //otherBtn.style.display = "block";
+  let favorites = getFavoriteMovies();
+  let exists = favorites.find((movie) => movie.id == id);
+  if (exists.id == id) {
+    let newFavorites = favorites.filter((movie) => movie.id != id);
+    saveFavoriteMovies(newFavorites);
+  }
+  selectAndClickCategory();
+  //let choice = getRadioValue();
+  //if (choice == "favorites") {
+  //displayFavorites();
+  //}
+}
 function getFavoriteMovies() {
   let favoriteMovies = localStorage.getItem("favoriteMovies");
   if (favoriteMovies == null) {
@@ -158,4 +203,23 @@ function displayMovies(movies) {
     // Write
     movieRow.appendChild(movieCard);
   });
+}
+
+//function selectAndClickCategory() {
+//ONLY works if something is set to the onclick attribute and not just the on change
+//// returns as array
+//let buttons = document.querySelectorAll("#btn-bar .btn-check");
+//let checked = Array.from(buttons).find((button) => button.checked);
+//if (checked) {
+//checked.click();
+//}
+//}
+function selectAndClickCategory() {
+  if (document.getElementById("btn-now-playing").checked) {
+    displayNowPlayingMovies();
+  } else if (document.getElementById("btn-popular").checked) {
+    displayPopularMovies();
+  } else if (document.getElementById("btn-favorites").checked) {
+    displayFavorites();
+  }
 }
