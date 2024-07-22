@@ -1,4 +1,3 @@
-
 // Orchestrators
 displayNowPlayingMovies();
 async function displayNowPlayingMovies() {
