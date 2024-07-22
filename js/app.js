@@ -1,6 +1,4 @@
-
 // Orchestrators
-displayNowPlayingMovies();
 async function displayNowPlayingMovies() {
   let movies = await getNowPlayingMovies();
   displayMovies(movies);
@@ -21,77 +19,57 @@ async function displaySearchResults() {
   let encodeQuery = encodeURIComponent(query);
   let movies = await getSearchResults(encodeQuery);
   displayMovies(movies);
-  document.getElementById("page-title").innerText = `Search Results for "${query}`;
+  document.getElementById(
+    "page-title"
+  ).innerText = `Search Results for "${query}`;
   uncheckButtons();
 }
-// Api pulls
-async function getNowPlayingMovies() {
-  let apiKey = localStorage.getItem("tmdbAPIkey");
-  const nowPlayingMoviesURL = `https://api.themoviedb.org/3/movie/now_playing`;
-  try {
-    let response = await fetch(nowPlayingMoviesURL, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    });
-    if (!response.ok) throw new Error("Network response was not ok");
-    let nowPlayingMovies = await response.json();
-    return nowPlayingMovies.results;
-  } catch (error) {
-    console.error(`Fetch Error ${error}`);
-    return [];
+async function displayMovieDetails() {
+  const defaultMovieID = 47852;
+  const urlParams = new URLSearchParams(window.location.search);
+  let id = urlParams.get("id") || defaultMovieID;
+  let movie = await getMovie(id);
+  if (!movie) {
+    console.log(`Movie with id ${id} not found.`);
+    id = defaultMovieID;
+    movie = await getMovie(id);
   }
-}
-async function getPopularMovies() {
-  let apiKey = localStorage.getItem("tmdbAPIkey");
-  const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular`;
+  let certification = "";
   try {
-    let response = await fetch(popularMoviesUrl, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    });
-    if (!response.ok) throw new Error("Network response was not ok");
-    let popularMovies = await response.json();
-    return popularMovies.results;
-  } catch (error) {
-    console.error(`Fetch Error ${error}`);
-    return [];
+    let usReleaseDates = movie.release_dates.results.find((rd) => rd.iso_3166_1 === "US");
+    if (!usReleaseDates) {
+      certification = "NR";
+    }
+    certification = usReleaseDates.release_dates.find(
+      (rd) => rd.certification != ""
+    );
+  } catch {
+    certification = "NR";
   }
-}
-async function getSearchResults(query) {
-  let apiKey = localStorage.getItem("tmdbAPIkey");
-  const searchURL = `https://api.themoviedb.org/3/search/movie?query=${query}`;
-  try {
-    let response = await fetch(searchURL, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    });
-    if (!response.ok) throw new Error("Network response was not ok");
-    let search = await response.json();
-    return search.results;
-  } catch (error) {
-    console.error(`Fetch Error ${error}`);
-    return [];
+  document.getElementById("movie-title").innerText = movie.title;
+  let movieDetails = document.getElementById("movie-details");
+  let backdropPath = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
+  if (movie.backdrop_path == null) {
+    backdropPath = "/img/Backdrop.jpg";
   }
-}
-async function getMovie(id) {
-  let apiKey = localStorage.getItem("tmdbAPIkey");
-  const movieURL = `https://api.themoviedb.org/3/movie/${id}`;
-  try {
-    let response = await fetch(movieURL, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    });
-    if (!response.ok) throw new Error("Network response was not ok");
-    let movieDetails = await response.json();
-    return movieDetails;
-  } catch (error) {
-    console.error(`Fetch Error ${error}`);
-    return [];
+  movieDetails.style.background = `url(${backdropPath}), linear-gradient(rgba(0,0,0, .5), rgba(0,0,0, .9))`;
+  movieDetails.style.backgroundPosition = "cover";
+  movieDetails.style.backgroundRepeat = "no-repeat";
+  movieDetails.style.backgroundBlendMode = "overlay";
+  let moviePoster = document.getElementById("movie-poster");
+  let posterPath = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+  if (movie.poster_path == null) {
+    posterPath = "/img/poster.png";
   }
+  moviePoster.src = posterPath;
+  let movieCert = document.getElementById("movie-cert");
+  movieCert.innerText = certification;
+  let movieRelease = document.getElementById("movie-release");
+  movieRelease.innerText = new Date(movie.release_date).toLocaleDateString();
+  let minutes = movie.runtime % 60;
+  let hours = (movie.runtime - minutes) / 60;
+  let movieRuntime = document.getElementById("movie-runtime");
+  movieRuntime.innerText = `${hours}h ${minutes}m`;
 }
 // Non api pull
 async function addFavoriteMovie(btn) {
@@ -189,6 +167,8 @@ function displayMovies(movies) {
       removeFavBtn.style.display = "none";
       addFavBtn.style.display = "block";
     }
+    let infoBtn = movieCard.querySelector("[data-info]");
+    infoBtn.href = `/movieDetails.html?id=${movie.id}`;
     // Write
     movieRow.appendChild(movieCard);
   });
@@ -214,9 +194,8 @@ function selectAndClickCategory() {
 }
 function uncheckButtons() {
   let buttons = document.querySelectorAll("#btn-bar .btn-check");
-  let checked = Array.from(buttons).find(button => button.checked);
+  let checked = Array.from(buttons).find((button) => button.checked);
   if (checked) {
     checked.checked = false;
   }
-  
 }

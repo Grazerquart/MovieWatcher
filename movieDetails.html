@@ -63,45 +63,28 @@
                 </div>
             </div>
         </nav>
-        <!-- Secondary Nav -->
-        <div class="container mt-5">
-            <div class="row row-cols-1 gy-3">
-                <div class="col">
-                    <form onsubmit="return false">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Movies" data-bs-toggle="tooltip"
-                                data-bs-placement="top" data-bs-title="Enter a movie title" id="movie-search" autocomplete="off">
-                            <button default onclick="displaySearchResults()"
-                                class="btn btn-outline-primary">Search</button>
+    </header>
+    <main>
+        <div class="container-fluid p-0">
+            <div id="movie-details">
+                <div id="movie-wrapper">
+                    <div class="container-xxl py-3">
+                        <div class="row">
+                            <div class="col-12 col-md-4 col-xl-3 text-center text-md-end">
+                                <img class="img-fluid" id="movie-poster">
+                            </div>
+                            <div class="col-12 col-md-8 col-xl-9">
+                                <h3 class="display-6 fw-bold mb-0" id="movie-title"></h3>
+                                <div class="hstack gap-2">
+                                    <div id="movie-cert"></div>
+                                    <div id="movie-release"></div>
+                                    <div id="movie-runtime"></div>
+                                </div>
+                            </div>
                         </div>
-                    </form>
-                </div>
-                <div class="col text-center text-md-start">
-                    <div class="btn-group" role="group" id="btn-bar">
-                        <input type="radio" onchange="displayNowPlayingMovies()" class="btn-check" name="btn-radio"
-                            id="btn-now-playing" autocomplete="off" checked>
-                        <label for="btn-now-playing" class="btn btn-outline-primary">Now Playing</label>
-
-                        <input type="radio" onchange="displayPopularMovies()" class="btn-check" name="btn-radio"
-                            id="btn-popular" autocomplete="off">
-                        <label for="btn-popular" class="btn btn-outline-primary">Popular</label>
-
-                        <input type="radio" onchange="displayFavorites()" class="btn-check" name="btn-radio"
-                            id="btn-favorites" autocomplete="off">
-                        <label for="btn-favorites" class="btn btn-outline-primary">Favorites</label>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
-    <main>
-        <div class="container mt-5">
-            <h1 class="mt-3 text-center display-4" id="page-title">Now Playing Movies</h1>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 g-3" id="movie-row">
-                <!-- Movie Cards -->
-            </div>
-            <input type="text" id="api">
-            <button onclick="printAPI()">print</button>
         </div>
     </main>
     <footer class="py-3">
@@ -142,7 +125,7 @@
                         Fav</button>
                     <button onclick="removeFavoriteMovie(this)" class="btn btn-outline-danger" data-fav="true">Remove
                         Fav</button>
-                    <a href="#" data-info class="btn btn-outline-primary">More Info</a>
+                    <a href="#" class="btn btn-outline-primary">More Info</a>
 
                 </div>
             </div>
@@ -158,10 +141,10 @@
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
     <!-- My JS -->
-    <script src="/js/app.js"></script>
     <script src="/js/tmdbAPI.js"></script>
+    <script src="/js/app.js"></script>
     <script>
-        selectAndClickCategory();
+        displayMovieDetails();
     </script>
 </body>
 
