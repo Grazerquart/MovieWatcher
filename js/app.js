@@ -34,18 +34,6 @@ async function displayMovieDetails() {
     id = defaultMovieID;
     movie = await getMovie(id);
   }
-  let certification = "";
-  try {
-    let usReleaseDates = movie.release_dates.results.find((rd) => rd.iso_3166_1 === "US");
-    if (!usReleaseDates) {
-      certification = "NR";
-    }
-    certification = usReleaseDates.release_dates.find(
-      (rd) => rd.certification != ''
-    );
-  } catch {
-    certification = "NR";
-  }
   document.getElementById("movie-title").innerText = movie.title;
   let movieDetails = document.getElementById("movie-details");
   let backdropPath = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
@@ -63,15 +51,47 @@ async function displayMovieDetails() {
   }
   moviePoster.src = posterPath;
   let movieCert = document.getElementById("movie-cert");
-  movieCert.innerText = certification.certification;
+  movieCert.innerText = displayCertification(movie);
   let movieRelease = document.getElementById("movie-release");
   movieRelease.innerText = new Date(movie.release_date).toLocaleDateString();
   let minutes = movie.runtime % 60;
   let hours = (movie.runtime - minutes) / 60;
   let movieRuntime = document.getElementById("movie-runtime");
   movieRuntime.innerText = `${hours}h ${minutes}m`;
+  let movieOverview = document.getElementById("movie-overview");
+  movieOverview.innerText = movie.overview;
+  let movieGenres = document.getElementById("movie-genres");
+  movieGenres.innerHTML = displayGenres(movie);
+  let movieTagline = document.getElementById("movie-tagline");
+  movieTagline.innerText = movie.tagline;
+  let movieRating = document.getElementById("movie-rating");
+  let rating = (movie.vote_average * 10).toFixed(0);
+  movieRating.innerText = `User Rating: ${rating}%`;
+  let videos = await getMovieVideos(id);
+  if (videos.length < 1) {
+    document.getElementById("btn-trailer").style.display = "none";
+  } else {
+    document.getElementById("btn-trailer").style.display = "block";
+  }
 }
-// Non api pull
+async function loadVideo() {
+  let urlParams = new URLSearchParams(window.location.search);
+  let id = urlParams.get("id") || 47852;
+  let videos = await getMovieVideos(id);
+  if (videos.length > 0) {
+    let defaultVideo = videos[0];
+    videos = videos.filter((video) => video.type == "Trailer");
+    let trailerVideo = videos[0] || defaultVideo;
+    document.getElementById("trailerModalLabel").innerText = trailerVideo.name;
+    document.getElementById(
+      "movie-trailer"
+    ).src = `https://www.youtube.com/embed/${trailerVideo.key}`;
+  }
+}
+async function unloadVideo() {
+  document.getElementById("movie-trailer").src = '';
+}
+// Favorite Movie Management
 async function addFavoriteMovie(btn) {
   let id = btn.getAttribute("data-movie-id");
   btn.style.display = "none";
@@ -172,6 +192,34 @@ function displayMovies(movies) {
     // Write
     movieRow.appendChild(movieCard);
   });
+}
+// Display Details Constructors
+function displayGenres(movie) {
+  let genresTemplate = "";
+  movie.genres.forEach((genre) => {
+    genresTemplate += `<span class="badge text-bg-secondary rounded-pill me-1">${genre.name}</span>`;
+  });
+  return genresTemplate;
+}
+function displayCertification(movie) {
+  let certification = "";
+  try {
+    let usReleaseDates = movie.release_dates.results.find(
+      (rd) => rd.iso_3166_1 === "US"
+    );
+    if (!usReleaseDates) {
+      certification = "NR";
+    }
+    certification = usReleaseDates.release_dates.find(
+      (rd) => rd.certification != ""
+    );
+  } catch {
+    certification = "NR";
+  }
+  return certification.certification;
+}
+function displayCredits(id) {
+
 }
 
 //function selectAndClickCategory() {

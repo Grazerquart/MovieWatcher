@@ -97,21 +97,31 @@ a:hover {
 }
 
 #movie-poster {
-    border-radius: 10px;
-    max-width: 75vw;
-    width: 100%;
-    height: auto;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; 
+  border-radius: 10px;
+  max-width: 75vw;
+  width: 100%;
+  height: auto;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 #movie-details {
-    color: var(--sm-light-color);
+  color: var(--sm-light-color);
 }
 #movie-wrapper {
-    backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
 }
 #movie-cert {
-    border: solid;
-    border-color: white;
-    padding-left: .25rem;
-    padding-right: .25rem;
+  border: solid;
+  border-color: white;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+.card-body {
+  border-top: 1px solid var(--sm-theme-900);
+  background-color: rgba(0, 0, 0, 0.1);
+  min-height: 5rem;
+}
+.actor-name {
+  font-size: .9rem;
 }

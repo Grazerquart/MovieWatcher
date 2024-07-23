@@ -80,3 +80,37 @@ async function getMovie(id) {
     return [];
   }
 }
+async function getMovieVideos(id) {
+  let apiKey = localStorage.getItem("tmdbAPIkey");
+  const videosURL = `https://api.themoviedb.org/3/movie/${id}/videos`;
+  try {
+    let response = await fetch(videosURL, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+    if (!response.ok) throw new Error("Network response was not ok");
+    let videoList = await response.json();
+    return videoList.results;
+  } catch (error) {
+    console.error(`Fetch Error ${error}`);
+    return [];
+  }
+}
+async function getCredits(id) {
+  let apiKey = localStorage.getItem("tmdbAPIkey");
+  const creditsURL = `https://api.themoviedb.org/3/movie/${id}/credits`;
+  try {
+    let response = await fetch(creditsURL, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+    if (!response.ok) throw new Error("Network response was not ok");
+    let credits = await response.json();
+    return credits;
+  } catch (error) {
+    console.error(`Fetch Error ${error}`);
+    return [];
+  }
+}
