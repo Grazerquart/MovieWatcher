@@ -41,7 +41,7 @@ async function displayMovieDetails() {
       certification = "NR";
     }
     certification = usReleaseDates.release_dates.find(
-      (rd) => rd.certification != ""
+      (rd) => rd.certification != ''
     );
   } catch {
     certification = "NR";
@@ -63,7 +63,7 @@ async function displayMovieDetails() {
   }
   moviePoster.src = posterPath;
   let movieCert = document.getElementById("movie-cert");
-  movieCert.innerText = certification;
+  movieCert.innerText = certification.certification;
   let movieRelease = document.getElementById("movie-release");
   movieRelease.innerText = new Date(movie.release_date).toLocaleDateString();
   let minutes = movie.runtime % 60;
